@@ -1,5 +1,5 @@
 # KeylolAutoCheck
-其乐论坛（keylol.com）简易自动签到脚本
+其乐论坛（keylol.com）简易自动签到脚本（支持多用户）
 
 # 使用方法
 
@@ -35,7 +35,11 @@
              plus_key（http://www.pushplus.plus/ 的token），部署
                
           5、触发管理->创建定时触发器->自定义触发周期（Cron表达式: 0 0 5 * * * *）->测试完成
-            
+  
+  ***多用户配置***
+
+          在main.py或index.py中创建usr对象，并放入user_list中,例如user_list = [usr0, usr1]
+          
 # Licence
 
 [Apache Licence](https://github.com/nix18/KeylolAutoCheck/raw/master/LICENSE)
