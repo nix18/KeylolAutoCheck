@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-# 腾讯云SCF脚本，须在在线IDE终端，1- cd src , 2- pip install bs4 -t .
+# 腾讯云SCF脚本
 import io
 import random
 import sys
@@ -9,6 +9,9 @@ from urllib.parse import quote
 from bs4 import BeautifulSoup
 
 from user import user
+import logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')  # 改变标准输出的默认编码
 
@@ -37,6 +40,7 @@ def auto(user, url):
 
         resp = request.urlopen(req)
         print("【", resp.getcode(), "】", "已访问：", url)
+        logger.info("【{}】已访问：{}".format(resp.getcode(),url))
         u3 += "【" + str(resp.getcode()) + "】" + "已访问：" + url + "<br>"
     except Exception as e:
         u3 += e.__str__() + "<br>"
@@ -55,9 +59,10 @@ def getCredit(user, url):
 
         resp = request.urlopen(req)
         bs = BeautifulSoup(resp.read().decode('utf-8'), "html.parser")
-        em = bs.findAll('li')[100]
+        em = bs.findAll('li')[99]
         uname = bs.find("h2", {'class': 'mbn'}).text
         print(em.text)
+        logger.info(em.text)
         u3 += em.text + "<br>"
     except Exception as e:
         u3 += e.__str__() + "<br>"
@@ -71,6 +76,7 @@ def pushMsg(url):
                    'Safari/537.36')
     resp = request.urlopen(req)
     print("推送消息结果：", str(resp.read(), 'utf-8'))
+    logger.info("推送消息结果：{}".format(str(resp.read(), 'utf-8')))
 
 
 def autoCheck(user):
@@ -81,14 +87,17 @@ def autoCheck(user):
     print("其乐自动签到 By Moecola.com")
     print("--------------------------")
     print("【签到开始】")
+    logger.info("【签到开始】")
     u3 += '【签到开始】 '
     getCredit(user, user.user_page)
     auto(user, u1)
     auto(user, u2)
     print("【签到结束】")
+    logger.info("【签到结束】")
     u3 += '【签到结束】 '
     getCredit(user, user.user_page)
     print(uname, "签到完成")
+    logger.info("{}签到完成".format(uname))
     u3 += "<br>" + uname + "签到完成"
     u3 = quote(u3, 'utf-8')
     pushMsg(u3h + u3)
